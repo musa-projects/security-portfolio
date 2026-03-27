@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Engineering Portfolio | Musa</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1117;--card:#161B22;--border:#30363D;
+  --blue:#58A6FF;--green:#3FB950;--yellow:#D29922;--red:#F85149;
+  --text:#E6EDF3;--text2:#8B949E;--purple:#BC8CFF;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+nav .brand{display:flex;align-items:center;gap:.75rem}
+nav .brand .shield{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+nav .brand h1{font-size:1.1rem;font-weight:600}
+nav .brand span{color:var(--text2);font-size:.85rem;margin-left:.5rem}
+nav .nav-right{display:flex;align-items:center;gap:1.25rem}
+nav .nav-right a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+nav .nav-right a:hover{color:var(--blue)}
+
+/* ── LIVE BADGE ── */
+.live-badge{display:flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em}
+.live-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,.7)}50%{opacity:.7;box-shadow:0 0 0 8px rgba(63,185,80,0)}}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:3.5rem 2rem 1rem;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(88,166,255,.08),transparent 70%);pointer-events:none}
+.hero h2{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.4rem}
+.hero p{color:var(--text2);font-size:1.05rem;max-width:600px;margin:0 auto}
+
+/* ── METRICS ── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;max-width:1100px;margin:2rem auto;padding:0 2rem}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+.metric-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.metric-card:nth-child(1){border-color:rgba(63,185,80,.3)}.metric-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#2ea043)}.metric-card:nth-child(1):hover{border-color:var(--green)}
+.metric-card:nth-child(2){border-color:rgba(248,81,73,.3)}.metric-card:nth-child(2)::before{background:linear-gradient(90deg,var(--red),#da3633)}.metric-card:nth-child(2):hover{border-color:var(--red)}
+.metric-card:nth-child(3){border-color:rgba(188,140,255,.3)}.metric-card:nth-child(3)::before{background:linear-gradient(90deg,var(--purple),#8957e5)}.metric-card:nth-child(3):hover{border-color:var(--purple)}
+.metric-card:nth-child(4){border-color:rgba(88,166,255,.3)}.metric-card:nth-child(4)::before{background:linear-gradient(90deg,var(--blue),#1f6feb)}.metric-card:nth-child(4):hover{border-color:var(--blue)}
+.metric-card .icon{font-size:1.8rem;margin-bottom:.5rem}
+.metric-card .number{font-size:2.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+.metric-card .label{color:var(--text2);font-size:.85rem;margin-top:.25rem}
+
+/* ── SECTIONS ── */
+.container{max-width:1100px;margin:0 auto;padding:0 2rem}
+section{margin:3rem 0}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.section-header .tag{font-size:.7rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;text-transform:uppercase;letter-spacing:.05em}
+.section-header h3{font-size:1.35rem;font-weight:600}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;flex-direction:column;gap:.75rem}
+.gate{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;opacity:0;transform:translateX(-40px);transition:transform .25s,border-color .25s,box-shadow .25s}
+.gate.visible{opacity:1;transform:translateX(0)}
+.gate:hover{border-color:var(--green);box-shadow:0 0 20px rgba(63,185,80,.08)}
+.gate-num{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+.gate-pass .gate-num{background:rgba(63,185,80,.15);color:var(--green)}
+.gate-info{flex:1}
+.gate-info .gate-name{font-weight:600;font-size:.95rem}
+.gate-info .gate-tools{color:var(--text2);font-size:.8rem}
+.gate-status{font-size:.8rem;font-weight:600;padding:.25rem .75rem;border-radius:20px}
+.gate-pass .gate-status{background:rgba(63,185,80,.12);color:var(--green)}
+.gate-connector{width:2px;height:16px;background:var(--border);margin-left:17px;margin:-4px 0}
+
+/* ── CSPM TABLE ── */
+.findings-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.findings-table thead{background:rgba(48,54,61,.5)}
+.findings-table th{padding:.85rem 1rem;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);cursor:pointer;user-select:none;transition:color .2s}
+.findings-table th:hover{color:var(--blue)}
+.findings-table th.sorted::after{content:' \u25BC';font-size:.6rem}
+.findings-table th.sorted.asc::after{content:' \u25B2';font-size:.6rem}
+.findings-table td{padding:.75rem 1rem;border-top:1px solid var(--border);font-size:.88rem}
+.findings-table tbody tr{opacity:0;transform:translateY(8px);transition:background .2s}
+.findings-table tbody tr.visible{opacity:1;transform:translateY(0)}
+.findings-table tbody tr:hover{background:rgba(88,166,255,.04)}
+.sev{font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sev-critical{background:rgba(248,81,73,.15);color:var(--red)}
+.sev-high{background:rgba(210,153,34,.15);color:var(--yellow)}
+.sev-medium{background:rgba(88,166,255,.15);color:var(--blue)}
+.sev-low{background:rgba(139,148,158,.15);color:var(--text2)}
+
+/* ── IR CARDS ── */
+.ir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.ir-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+.ir-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--blue))}
+.ir-card:hover{transform:translateY(-3px);border-color:var(--purple);box-shadow:0 8px 25px rgba(0,0,0,.35)}
+.ir-card .ir-id{font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:.78rem;color:var(--purple);margin-bottom:.6rem;letter-spacing:.02em}
+.ir-card .ir-type{font-weight:600;font-size:1rem;margin-bottom:.4rem}
+.ir-card .ir-detail{color:var(--text2);font-size:.85rem;margin-bottom:.75rem}
+.ir-card .ir-response{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--green);font-weight:600}
+.ir-card .ir-response .dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+
+/* ── REPOS ── */
+.repos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.repo-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-decoration:none;color:var(--text);transition:transform .25s,border-color .25s,box-shadow .25s}
+.repo-card:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 8px 25px rgba(0,0,0,.35)}
+.repo-card .repo-icon{font-size:1.3rem;margin-bottom:.5rem}
+.repo-card .repo-name{font-weight:600;font-size:1rem;color:var(--blue);margin-bottom:.3rem}
+.repo-card .repo-desc{color:var(--text2);font-size:.83rem;line-height:1.5}
+.repo-card .repo-lang{margin-top:.75rem;display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--text2)}
+.repo-card .repo-lang .dot{width:10px;height:10px;border-radius:50%;background:#3572A5}
+
+/* ── ARCHITECTURE ── */
+.arch-flow{display:flex;align-items:center;justify-content:center;gap:0;margin:1.5rem 0;flex-wrap:wrap}
+.arch-node{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem 1.25rem;text-align:center;font-size:.85rem;font-weight:600;transition:border-color .25s}
+.arch-node:hover{border-color:var(--blue)}
+.arch-node small{display:block;font-weight:400;color:var(--text2);font-size:.75rem}
+.arch-arrow{color:var(--border);font-size:1.2rem;padding:0 .25rem}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);margin-top:4rem}
+footer p{color:var(--text2);font-size:.85rem}
+footer .tech{margin-top:.5rem;color:var(--text2);font-size:.8rem}
+footer .tech span{color:var(--blue)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .ir-grid,.repos-grid{grid-template-columns:1fr}
+  .arch-flow{flex-direction:column}
+  .arch-arrow{transform:rotate(90deg)}
+  nav .brand span{display:none}
+}
+@media(max-width:480px){
+  .metrics{grid-template-columns:1fr}
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{opacity:0;animation:fadeInUp .6s ease forwards}
+.fade-in:nth-child(1){animation-delay:.1s}
+.fade-in:nth-child(2){animation-delay:.2s}
+.fade-in:nth-child(3){animation-delay:.3s}
+.fade-in:nth-child(4){animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">
+    <div class="shield">&#x1F6E1;</div>
+    <h1>Musa<span>Security Engineer</span></h1>
+  </div>
+  <div class="nav-right">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#cspm">CSPM</a>
+    <a href="#ir">Incidents</a>
+    <a href="#repos">Repos</a>
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>Security Engineering Portfolio</h2>
+  <p>End-to-end security coverage: prevention, detection, and automated response &mdash; built on AWS Free Tier with open-source tools.</p>
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric-card fade-in">
+    <div class="icon">&#x2705;</div>
+    <div class="number" data-target="5" data-suffix="/5">0/5</div>
+    <div class="label">Gates Passing</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="icon">&#x1F50D;</div>
+    <div class="number" data-target="11">0</div>
+    <div class="label">CSPM Findings</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="icon">&#x26A1;</div>
+    <div class="number" data-target="3">0</div>
+    <div class="label">IR Incidents Handled</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="icon">&#x23F1;</div>
+    <div class="number" data-target="2" data-suffix="s">&lt;2s</div>
+    <div class="label">Avg Response Time</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ARCHITECTURE -->
+<section>
+  <div class="section-header">
+    <div class="tag" style="background:rgba(88,166,255,.12);color:var(--blue)">Architecture</div>
+    <h3>Security Lifecycle Coverage</h3>
+  </div>
+  <div class="arch-flow">
+    <div class="arch-node">&#x1F6E1; Prevention<small>CSPM + DevSecOps</small></div>
+    <div class="arch-arrow">&#x25B6;</div>
+    <div class="arch-node">&#x1F50D; Detection<small>CloudWatch + GuardDuty</small></div>
+    <div class="arch-arrow">&#x25B6;</div>
+    <div class="arch-node">&#x26A1; Response<small>IR Playbook Engine</small></div>
+    <div class="arch-arrow">&#x25B6;</div>
+    <div class="arch-node">&#x1F4CA; Evidence<small>S3 + DynamoDB</small></div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="section-header">
+    <div class="tag" style="background:rgba(63,185,80,.12);color:var(--green)">Project 2</div>
+    <h3>DevSecOps Pipeline &mdash; 5 Security Gates</h3>
+  </div>
+  <div class="pipeline">
+    <div class="gate gate-pass">
+      <div class="gate-num">1</div>
+      <div class="gate-info">
+        <div class="gate-name">SAST &mdash; Static Analysis</div>
+        <div class="gate-tools">Semgrep + Bandit &middot; SQL injection, eval(), shell=True detected</div>
+      </div>
+      <div class="gate-status">PASS</div>
+    </div>
+    <div class="gate-connector"></div>
+    <div class="gate gate-pass">
+      <div class="gate-num">2</div>
+      <div class="gate-info">
+        <div class="gate-name">Dependency Scanning</div>
+        <div class="gate-tools">Trivy + pip-audit &middot; CVEs in Flask, Werkzeug, cryptography, Jinja2</div>
+      </div>
+      <div class="gate-status">PASS</div>
+    </div>
+    <div class="gate-connector"></div>
+    <div class="gate gate-pass">
+      <div class="gate-num">3</div>
+      <div class="gate-info">
+        <div class="gate-name">Secrets Detection</div>
+        <div class="gate-tools">Gitleaks &middot; AWS keys + API tokens caught in source</div>
+      </div>
+      <div class="gate-status">PASS</div>
+    </div>
+    <div class="gate-connector"></div>
+    <div class="gate gate-pass">
+      <div class="gate-num">4</div>
+      <div class="gate-info">
+        <div class="gate-name">Container Scanning</div>
+        <div class="gate-tools">Trivy image scan &middot; OS + library CVEs in Docker image</div>
+      </div>
+      <div class="gate-status">PASS</div>
+    </div>
+    <div class="gate-connector"></div>
+    <div class="gate gate-pass">
+      <div class="gate-num">5</div>
+      <div class="gate-info">
+        <div class="gate-name">IaC Scanning</div>
+        <div class="gate-tools">Checkov &middot; Dockerfile HEALTHCHECK, USER, secret ENV checks</div>
+      </div>
+      <div class="gate-status">PASS</div>
+    </div>
+  </div>
+</section>
+
+<!-- CSPM -->
+<section id="cspm">
+  <div class="section-header">
+    <div class="tag" style="background:rgba(248,81,73,.12);color:var(--red)">Project 1</div>
+    <h3>CSPM Findings &mdash; AWS Account Audit</h3>
+  </div>
+  <table class="findings-table" id="findingsTable">
+    <thead>
+      <tr>
+        <th data-sort="severity" class="sorted">Severity</th>
+        <th data-sort="service">Service</th>
+        <th data-sort="finding">Finding</th>
+        <th data-sort="resource">Resource</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-severity="0"><td><span class="sev sev-critical">Critical</span></td><td>EC2</td><td>SSH open to 0.0.0.0/0</td><td>sg-089892aa76e4308c2</td></tr>
+      <tr data-severity="0"><td><span class="sev sev-critical">Critical</span></td><td>EC2</td><td>SSH open to 0.0.0.0/0</td><td>sg-08f4e7fde0b894f8c6</td></tr>
+      <tr data-severity="0"><td><span class="sev sev-critical">Critical</span></td><td>CloudTrail</td><td>CloudTrail not enabled</td><td>us-east-1</td></tr>
+      <tr data-severity="1"><td><span class="sev sev-high">High</span></td><td>IAM</td><td>No MFA enabled</td><td>cspm-auditor01</td></tr>
+      <tr data-severity="1"><td><span class="sev sev-high">High</span></td><td>IAM</td><td>AdministratorAccess attached</td><td>cspm-auditor01</td></tr>
+      <tr data-severity="1"><td><span class="sev sev-high">High</span></td><td>GuardDuty</td><td>GuardDuty not enabled</td><td>us-east-1</td></tr>
+      <tr data-severity="1"><td><span class="sev sev-high">High</span></td><td>EC2</td><td>Unencrypted EBS volume</td><td>vol-02b2c9615135d702c</td></tr>
+      <tr data-severity="2"><td><span class="sev sev-medium">Medium</span></td><td>S3</td><td>Access logging disabled</td><td>ir-engine-evidence-149536469137</td></tr>
+      <tr data-severity="2"><td><span class="sev sev-medium">Medium</span></td><td>Config</td><td>AWS Config not enabled</td><td>us-east-1</td></tr>
+      <tr data-severity="3"><td><span class="sev sev-low">Low</span></td><td>S3</td><td>No lifecycle policy</td><td>ir-engine-evidence-149536469137</td></tr>
+      <tr data-severity="3"><td><span class="sev sev-low">Low</span></td><td>EC2</td><td>Default VPC in use</td><td>vpc-00d9811e10e0457d1</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- IR -->
+<section id="ir">
+  <div class="section-header">
+    <div class="tag" style="background:rgba(188,140,255,.12);color:var(--purple)">Project 3</div>
+    <h3>IR Playbook Engine &mdash; Automated Incident Response</h3>
+  </div>
+  <div class="ir-grid">
+    <div class="ir-card fade-in">
+      <div class="ir-id">IR-28260327-F2C0FF</div>
+      <div class="ir-type">SSH Brute Force</div>
+      <div class="ir-detail">Attacker IP 1.2.3.4 blocked &middot; NACL deny rule applied &middot; Evidence captured to S3</div>
+      <div class="ir-response"><div class="dot"></div>2s response</div>
+    </div>
+    <div class="ir-card fade-in">
+      <div class="ir-id">IR-20260327-B5D81F</div>
+      <div class="ir-type">Public S3 Remediation</div>
+      <div class="ir-detail">my-test-bucket made public &middot; Public access block re-enabled &middot; Alert sent via Telegram</div>
+      <div class="ir-response"><div class="dot"></div>2s response</div>
+    </div>
+    <div class="ir-card fade-in">
+      <div class="ir-id">IR-20260327-519UDF</div>
+      <div class="ir-type">IAM Anomaly</div>
+      <div class="ir-detail">AdministratorAccess attached to new.employee &middot; Access key disabled &middot; Incident logged</div>
+      <div class="ir-response"><div class="dot"></div>2s response</div>
+    </div>
+  </div>
+</section>
+
+<!-- REPOS -->
+<section id="repos">
+  <div class="section-header">
+    <div class="tag" style="background:rgba(88,166,255,.12);color:var(--blue)">Source Code</div>
+    <h3>Live Repositories</h3>
+  </div>
+  <div class="repos-grid">
+    <a class="repo-card" href="https://github.com/musa-projects/devsecops-pipeline" target="_blank" rel="noopener">
+      <div class="repo-icon">&#x1F512;</div>
+      <div class="repo-name">devsecops-pipeline</div>
+      <div class="repo-desc">CI/CD pipeline with 5 automated security gates. SAST, SCA, secrets, container, and IaC scanning with auto-deploy to EC2.</div>
+      <div class="repo-lang"><div class="dot"></div>Python &middot; GitHub Actions &middot; Docker</div>
+    </a>
+    <a class="repo-card" href="https://github.com/musa-projects/cspm-tool" target="_blank" rel="noopener">
+      <div class="repo-icon">&#x2601;</div>
+      <div class="repo-name">cspm-tool</div>
+      <div class="repo-desc">Cloud Security Posture Management tool auditing S3, IAM, EC2, and CloudTrail against CIS benchmarks.</div>
+      <div class="repo-lang"><div class="dot"></div>Python &middot; boto3 &middot; AWS</div>
+    </a>
+    <a class="repo-card" href="https://github.com/musa-projects/ir-playbook-engine" target="_blank" rel="noopener">
+      <div class="repo-icon">&#x26A1;</div>
+      <div class="repo-name">ir-playbook-engine</div>
+      <div class="repo-desc">Serverless incident response with 3 Lambda playbooks, DynamoDB incident log, and S3 evidence collection.</div>
+      <div class="repo-lang"><div class="dot" style="background:#E34C26"></div>Python &middot; Terraform &middot; Lambda</div>
+    </a>
+  </div>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Security Engineering Portfolio &mdash; Musa</p>
+  <div class="tech">Built with <span>Python</span> &middot; <span>Terraform</span> &middot; <span>GitHub Actions</span> &middot; <span>AWS</span></div>
+</footer>
+
+<script>
+// ── Counter animation ──
+function animateCounters(){
+  document.querySelectorAll('.number[data-target]').forEach(el=>{
+    const target=+el.dataset.target;
+    const suffix=el.dataset.suffix||'';
+    const duration=1400;
+    const start=performance.now();
+    function tick(now){
+      const elapsed=now-start;
+      const progress=Math.min(elapsed/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const current=Math.round(eased*target);
+      el.textContent=current+suffix;
+      if(progress<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// ── Gate slide-in ──
+function animateGates(){
+  document.querySelectorAll('.gate').forEach((gate,i)=>{
+    setTimeout(()=>{
+      gate.classList.add('visible');
+      gate.style.transition=`opacity .5s ease ${i*.12}s, transform .5s ease ${i*.12}s`;
+    },300+i*120);
+  });
+}
+
+// ── Table row fade-in ──
+function animateRows(){
+  document.querySelectorAll('.findings-table tbody tr').forEach((row,i)=>{
+    setTimeout(()=>{
+      row.classList.add('visible');
+      row.style.transition=`opacity .4s ease, transform .4s ease`;
+    },800+i*80);
+  });
+}
+
+// ── Table sorting ──
+const table=document.getElementById('findingsTable');
+const headers=table.querySelectorAll('th[data-sort]');
+let sortDir={};
+
+headers.forEach(th=>{
+  th.addEventListener('click',()=>{
+    const key=th.dataset.sort;
+    const asc=sortDir[key]=!sortDir[key];
+    headers.forEach(h=>{h.classList.remove('sorted','asc')});
+    th.classList.add('sorted');
+    if(asc)th.classList.add('asc');
+
+    const tbody=table.querySelector('tbody');
+    const rows=[...tbody.querySelectorAll('tr')];
+    const colIdx=[...th.parentElement.children].indexOf(th);
+
+    rows.sort((a,b)=>{
+      if(key==='severity'){
+        const va=+a.dataset.severity;
+        const vb=+b.dataset.severity;
+        return asc?va-vb:vb-va;
+      }
+      const va=a.children[colIdx].textContent.trim();
+      const vb=b.children[colIdx].textContent.trim();
+      return asc?va.localeCompare(vb):vb.localeCompare(va);
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  });
+});
+
+// ── Intersection Observer for scroll animations ──
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      entry.target.style.transition='opacity .5s ease, transform .5s ease';
+    }
+  });
+},{threshold:0.1});
+
+document.querySelectorAll('.ir-card,.repo-card').forEach(el=>observer.observe(el));
+
+// ── Init ──
+window.addEventListener('load',()=>{
+  animateCounters();
+  animateGates();
+  animateRows();
+});
+</script>
+</body>
+</html>
